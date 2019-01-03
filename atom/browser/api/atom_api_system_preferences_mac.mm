@@ -383,6 +383,92 @@ bool SystemPreferences::IsTrustedAccessibilityClient(bool prompt) {
   return AXIsProcessTrustedWithOptions((CFDictionaryRef)options);
 }
 
+std::string SystemPreferences::GetColor(const std::string& color,
+                                        mate::Arguments* args) {
+  NSColor* sysColor;
+  if (color == "alternate-selected-control-text") {
+    sysColor = [NSColor alternateSelectedControlTextColor];
+  } else if (color == "alternating-content-background") {
+    sysColor = [NSColor alternatingContentBackgroundColor];
+  } else if (color == "control-accent") {
+    sysColor = [NSColor controlAccentColor];
+  } else if (color == "control-background") {
+    sysColor = [NSColor controlBackgroundColor];
+  } else if (color == "control") {
+    sysColor = [NSColor controlColor];
+  } else if (color == "control-text") {
+    sysColor = [NSColor controlTextColor];
+  } else if (color == "disabled-control") {
+    sysColor = [NSColor disabledControlTextColor];
+  } else if (color == "find-highlight") {
+    sysColor = [NSColor findHighlightColor];
+  } else if (color == "grid") {
+    sysColor = [NSColor gridColor];
+  } else if (color == "header-text") {
+    sysColor = [NSColor headerTextColor];
+  } else if (color == "highlight") {
+    sysColor = [NSColor highlightColor];
+  } else if (color == "keyboard-focus-indicator") {
+    sysColor = [NSColor keyboardFocusIndicatorColor];
+  } else if (color == "label") {
+    sysColor = [NSColor labelColor];
+  } else if (color == "link") {
+    sysColor = [NSColor linkColor];
+  } else if (color == "placeholder-text") {
+    sysColor = [NSColor placeholderTextColor];
+  } else if (color == "quaternary-label") {
+    sysColor = [NSColor quaternaryLabelColor];
+  } else if (color == "scrubber-textured-background") {
+    sysColor = [NSColor scrubberTexturedBackgroundColor];
+  } else if (color == "secondary-label") {
+    sysColor = [NSColor secondaryLabelColor];
+  } else if (color == "selected-content-background") {
+    sysColor = [NSColor selectedContentBackgroundColor];
+  } else if (color == "selected-control") {
+    sysColor = [NSColor selectedControlColor];
+  } else if (color == "selected-control-text") {
+    sysColor = [NSColor selectedControlTextColor];
+  } else if (color == "selected-menu-item-text") {
+    sysColor = [NSColor selectedMenuItemTextColor];
+  } else if (color == "selected-text-background") {
+    sysColor = [NSColor selectedTextBackgroundColor];
+  } else if (color == "selected-text") {
+    sysColor = [NSColor selectedTextColor];
+  } else if (color == "separator") {
+    sysColor = [NSColor separatorColor];
+  } else if (color == "shadow") {
+    sysColor = [NSColor shadowColor];
+  } else if (color == "tertiary-label") {
+    sysColor = [NSColor tertiaryLabelColor];
+  } else if (color == "text-background") {
+    sysColor = [NSColor textBackgroundColor];
+  } else if (color == "text") {
+    sysColor = [NSColor textColor];
+  } else if (color == "under-page-background") {
+    sysColor = [NSColor underPageBackgroundColor];
+  } else if (color == "unemphasized-selected-content-background") {
+    sysColor = [NSColor unemphasizedSelectedContentBackgroundColor];
+  } else if (color == "unemphasized-selected-text-background") {
+    sysColor = [NSColor unemphasizedSelectedTextBackgroundColor];
+  } else if (color == "unemphasized-selected-text") {
+    sysColor = [NSColor unemphasizedSelectedTextColor];
+  } else if (color == "window-background") {
+    sysColor = [NSColor windowBackgroundColor];
+  } else if (color == "window-frame-text") {
+    sysColor = [NSColor windowFrameTextColor];
+  } else {
+    args->ThrowError("Unknown color: " + color);
+    return "";
+  }
+
+  NSString* rgbHex = [NSString
+      stringWithFormat:@"%02X%02X%02X", (int)(sysColor.redComponent * 0xFF),
+                       (int)(sysColor.greenComponent * 0xFF),
+                       (int)(sysColor.blueComponent * 0xFF)];
+
+  return std::string([rgbHex UTF8String]);
+}
+
 std::string SystemPreferences::GetMediaAccessStatus(
     const std::string& media_type,
     mate::Arguments* args) {
