@@ -378,6 +378,46 @@ void SystemPreferences::SetUserDefault(const std::string& name,
   }
 }
 
+std::string SystemPreferences::GetSystemColor(const std::string& color,
+                                              mate::Arguments* args) {
+  if (@available(macOS 10.10, *)) {
+    NSColor* sysColor;
+    if (color == "blue") {
+      sysColor = [NSColor systemBlueColor];
+    } else if (color == "brown") {
+      sysColor = [NSColor systemBrownColor];
+    } else if (color == "gray") {
+      sysColor = [NSColor systemGrayColor];
+    } else if (color == "green") {
+      sysColor = [NSColor systemGreenColor];
+    } else if (color == "orange") {
+      sysColor = [NSColor systemOrangeColor];
+    } else if (color == "pink") {
+      sysColor = [NSColor systemPinkColor];
+    } else if (color == "purple") {
+      sysColor = [NSColor systemPurpleColor];
+    } else if (color == "red") {
+      sysColor = [NSColor systemRedColor];
+    } else if (color == "yellow") {
+      sysColor = [NSColor systemYellowColor];
+    } else {
+      args->ThrowError("Unknown system color: " + color);
+      return "";
+    }
+
+    NSString* rgbHex = [NSString
+        stringWithFormat:@"%02X%02X%02X", (int)(sysColor.redComponent * 0xFF),
+                         (int)(sysColor.greenComponent * 0xFF),
+                         (int)(sysColor.blueComponent * 0xFF)];
+
+    return std::string([rgbHex UTF8String]);
+  } else {
+    args->ThrowError(
+        "This api is not available on MacOS version 10.9 or lower.");
+    return "";
+  }
+}
+
 bool SystemPreferences::IsTrustedAccessibilityClient(bool prompt) {
   NSDictionary* options = @{(id)kAXTrustedCheckOptionPrompt : @(prompt)};
   return AXIsProcessTrustedWithOptions((CFDictionaryRef)options);
